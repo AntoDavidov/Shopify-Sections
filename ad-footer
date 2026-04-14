@@ -13,7 +13,7 @@
             {{ section.settings.newsletter_text }}
           </div>
         {% endif %}
-        <div class="klaviyo-form-RkyabT"></div>
+        <div class="klaviyo-form-RkyabT"></div> {% comment %}here replace with your embedded Klaviyo singup{% endcomment %}
       </div>
 
       <div class="custom-footer__menus">
