@@ -14,9 +14,11 @@
 
             {% if left_desktop != blank %}
             <picture>
-                {% if left_mobile != blank %}
-                <source media="(max-width: 749px)" srcset="{{ left_mobile | image_url: width: 900 }}">
-                {% endif %}
+                {% unless section.settings.mobile_image_choice == 'right' %}
+                  {% if left_mobile != blank %}
+                    <source media="(max-width: 749px)" srcset="{{ left_mobile | image_url: width: 900 }}">
+                  {% endif %}
+                {% endunless %}
                 {{ left_desktop | image_url: width: 2000 | image_tag: loading: 'lazy', alt: section.settings.heading }}
             </picture>
             {% else %}
@@ -30,9 +32,11 @@
 
         {% if right_desktop != blank %}
           <picture>
-            {% if right_mobile != blank %}
-              <source media="(max-width: 749px)" srcset="{{ right_mobile | image_url: width: 900 }}">
-            {% endif %}
+            {% unless section.settings.mobile_image_choice == 'left' %}
+              {% if right_mobile != blank %}
+                <source media="(max-width: 749px)" srcset="{{ right_mobile | image_url: width: 900 }}">
+              {% endif %}
+            {% endunless %}
             {{ right_desktop | image_url: width: 2000 | image_tag: loading: 'lazy', alt: section.settings.heading }}
           </picture>
         {% else %}
@@ -116,6 +120,21 @@
     .sticky-split-images-{{ section.id }} .sticky-split-images__sticky-text h2 {
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
+    {% if section.settings.mobile_image_choice == 'left' %}
+      .sticky-split-images-{{ section.id }} .sticky-split-images__image:last-child {
+        display: none;
+      }
+      .sticky-split-images-{{ section.id }} .sticky-split-images__image:first-child {
+        width: 100%;
+      }
+    {% elsif section.settings.mobile_image_choice == 'right' %}
+      .sticky-split-images-{{ section.id }} .sticky-split-images__image:first-child {
+        display: none;
+      }
+      .sticky-split-images-{{ section.id }} .sticky-split-images__image:last-child {
+        width: 100%;
+      }
+    {% endif %}
   }
 </style>
 
@@ -148,6 +167,18 @@
             "type": "image_picker",
             "id": "right_image_mobile",
             "label": "Right mobile image"
+        },
+        {
+            "type": "select",
+            "id": "mobile_image_choice",
+            "label": "Mobile: show single image",
+            "info": "Choose which image displays on mobile. Upload a matching mobile image above for best results.",
+            "options": [
+                { "value": "both", "label": "Both images" },
+                { "value": "left", "label": "Left image only" },
+                { "value": "right", "label": "Right image only" }
+            ],
+            "default": "both"
         },
         {
             "type": "range",
