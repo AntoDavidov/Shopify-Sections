@@ -1,0 +1,861 @@
+<section class="ad-about ad-about-{{ section.id }}" data-ad-about>
+  <div class="ad-about__hero">
+    {% if section.settings.hero_video != blank %}
+      {{
+        section.settings.hero_video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          image_size: '1800x',
+          class: 'ad-about__hero-media'
+      }}
+    {% elsif section.settings.hero_image != blank %}
+      {{
+        section.settings.hero_image
+        | image_url: width: 2200
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'ad-about__hero-media',
+          alt: section.settings.hero_title
+      }}
+    {% else %}
+      <div class="ad-about__hero-media ad-about__hero-fallback"></div>
+    {% endif %}
+
+    <div class="ad-about__hero-shade"></div>
+
+    <div class="ad-about__hero-copy ad-about__reveal">
+      {% if section.settings.hero_kicker != blank %}
+        <p class="ad-about__kicker">{{ section.settings.hero_kicker }}</p>
+      {% endif %}
+      <h1>{{ section.settings.hero_title }}</h1>
+      {% if section.settings.hero_text != blank %}
+        <div class="ad-about__hero-text">{{ section.settings.hero_text }}</div>
+      {% endif %}
+    </div>
+
+    <div class="ad-about__pronunciation ad-about__reveal">
+      <span>{{ section.settings.pronunciation_label }}</span>
+      <strong>{{ section.settings.pronunciation }}</strong>
+    </div>
+  </div>
+
+  <div class="ad-about__marquee" aria-hidden="true">
+    <div class="ad-about__marquee-track">
+      <span>{{ section.settings.marquee_text }}</span>
+      <span>{{ section.settings.marquee_text }}</span>
+      <span>{{ section.settings.marquee_text }}</span>
+      <span>{{ section.settings.marquee_text }}</span>
+    </div>
+  </div>
+
+  <div class="ad-about__intro">
+    <div class="ad-about__intro-media ad-about__reveal">
+      {% if section.settings.founders_image != blank %}
+        {{
+          section.settings.founders_image
+          | image_url: width: 1300
+          | image_tag:
+            loading: 'lazy',
+            class: 'ad-about__image',
+            alt: section.settings.founders_heading
+        }}
+      {% else %}
+        <div class="ad-about__image-placeholder">
+          <span>Upload founder or lifestyle image</span>
+        </div>
+      {% endif %}
+    </div>
+    <div class="ad-about__intro-copy ad-about__reveal">
+      <p class="ad-about__eyebrow">{{ section.settings.founders_kicker }}</p>
+      <h2>{{ section.settings.founders_heading }}</h2>
+      <div class="ad-about__rte">{{ section.settings.founders_text }}</div>
+    </div>
+  </div>
+
+  <div class="ad-about__sticky-story">
+    <div class="ad-about__sticky-word">
+      <span>{{ section.settings.sticky_word_top }}</span>
+      <strong>{{ section.settings.sticky_word_bottom }}</strong>
+    </div>
+
+    <div class="ad-about__story-steps">
+      <article class="ad-about__story-step ad-about__reveal">
+        <span>01</span>
+        <h3>{{ section.settings.step_1_heading }}</h3>
+        <p>{{ section.settings.step_1_text }}</p>
+      </article>
+      <article class="ad-about__story-step ad-about__reveal">
+        <span>02</span>
+        <h3>{{ section.settings.step_2_heading }}</h3>
+        <p>{{ section.settings.step_2_text }}</p>
+      </article>
+      <article class="ad-about__story-step ad-about__reveal">
+        <span>03</span>
+        <h3>{{ section.settings.step_3_heading }}</h3>
+        <p>{{ section.settings.step_3_text }}</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="ad-about__balance">
+    <div class="ad-about__balance-heading ad-about__reveal">
+      <p class="ad-about__eyebrow">{{ section.settings.balance_kicker }}</p>
+      <h2>{{ section.settings.balance_heading }}</h2>
+    </div>
+
+    <div class="ad-about__balance-grid">
+      {% for block in section.blocks %}
+        <article class="ad-about__balance-card ad-about__reveal" {{ block.shopify_attributes }}>
+          <span>{{ forloop.index | prepend: '0' }}</span>
+          <h3>{{ block.settings.heading }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="ad-about__split">
+    <div class="ad-about__split-copy ad-about__reveal">
+      <h2>{{ section.settings.meaning_heading }}</h2>
+      <div class="ad-about__rte">{{ section.settings.meaning_text }}</div>
+    </div>
+    <div class="ad-about__split-media ad-about__reveal">
+      {% if section.settings.meaning_image != blank %}
+        {{
+          section.settings.meaning_image
+          | image_url: width: 1300
+          | image_tag:
+            loading: 'lazy',
+            class: 'ad-about__image',
+            alt: section.settings.meaning_heading
+        }}
+      {% else %}
+        <div class="ad-about__image-placeholder ad-about__image-placeholder--dark">
+          <span>Upload progress image</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ad-about__close ad-about__reveal">
+    <p>{{ section.settings.closing_kicker }}</p>
+    <h2>{{ section.settings.closing_heading }}</h2>
+    {% if section.settings.cta_label != blank %}
+      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="ad-about__button">
+        {{ section.settings.cta_label }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .ad-about-{{ section.id }} {
+    --ad-bg: {{ section.settings.background_color }};
+    --ad-ink: {{ section.settings.text_color }};
+    --ad-muted: {{ section.settings.muted_color }};
+    --ad-line: color-mix(in srgb, var(--ad-ink) 18%, transparent);
+    --ad-card: color-mix(in srgb, var(--ad-bg) 84%, var(--ad-ink) 16%);
+    background: var(--ad-bg);
+    color: var(--ad-ink);
+    overflow: clip;
+  }
+
+  .ad-about-{{ section.id }} * {
+    box-sizing: border-box;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero {
+    min-height: clamp(620px, 92svh, 980px);
+    position: relative;
+    display: grid;
+    align-items: end;
+    padding: clamp(24px, 4vw, 56px);
+    isolation: isolate;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-media,
+  .ad-about-{{ section.id }} .ad-about__hero-shade {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-media {
+    object-fit: cover;
+    z-index: -3;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-fallback {
+    background:
+      linear-gradient(135deg, #f2eee6 0%, #9c9c8f 46%, #111111 100%);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-shade {
+    z-index: -2;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, .18), rgba(0, 0, 0, .76)),
+      linear-gradient(90deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .08));
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-copy {
+    max-width: 920px;
+    color: #ffffff;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__kicker,
+  .ad-about-{{ section.id }} .ad-about__eyebrow {
+    margin: 0 0 16px;
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ad-muted);
+  }
+
+  .ad-about-{{ section.id }} h1,
+  .ad-about-{{ section.id }} h2,
+  .ad-about-{{ section.id }} h3,
+  .ad-about-{{ section.id }} p {
+    margin-top: 0;
+  }
+
+  .ad-about-{{ section.id }} h1 {
+    margin-bottom: 22px;
+    max-width: 11ch;
+    font-size: clamp(72px, 15vw, 220px);
+    line-height: .78;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} h2 {
+    margin-bottom: 22px;
+    font-size: clamp(36px, 6vw, 92px);
+    line-height: .9;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} h3 {
+    margin-bottom: 16px;
+    font-size: clamp(22px, 3vw, 42px);
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-text {
+    max-width: 560px;
+    font-size: clamp(18px, 2vw, 30px);
+    line-height: 1.18;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__hero-text p,
+  .ad-about-{{ section.id }} .ad-about__rte p {
+    margin-bottom: 1em;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__pronunciation {
+    position: absolute;
+    right: clamp(18px, 4vw, 56px);
+    bottom: clamp(18px, 4vw, 56px);
+    display: grid;
+    gap: 4px;
+    min-width: 150px;
+    padding-left: 18px;
+    border-left: 1px solid rgba(255, 255, 255, .44);
+    color: #ffffff;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__pronunciation span {
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .68;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__pronunciation strong {
+    font-size: clamp(20px, 2vw, 34px);
+    line-height: 1;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__marquee {
+    border-block: 1px solid var(--ad-line);
+    overflow: hidden;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__marquee-track {
+    width: max-content;
+    display: flex;
+    animation: ad-about-marquee-{{ section.id }} 30s linear infinite;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__marquee span {
+    padding: 18px 22px;
+    font-size: clamp(18px, 3vw, 42px);
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__intro,
+  .ad-about-{{ section.id }} .ad-about__split {
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+    gap: clamp(24px, 5vw, 84px);
+    align-items: center;
+    width: min(1480px, 100%);
+    margin-inline: auto;
+    padding: clamp(58px, 9vw, 140px) clamp(18px, 4vw, 56px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__intro-copy,
+  .ad-about-{{ section.id }} .ad-about__split-copy {
+    max-width: 660px;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__rte {
+    color: color-mix(in srgb, var(--ad-ink) 78%, transparent);
+    font-size: clamp(17px, 1.55vw, 24px);
+    line-height: 1.42;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__image,
+  .ad-about-{{ section.id }} .ad-about__image-placeholder {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__image-placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    padding: 24px;
+    background: var(--ad-card);
+    color: var(--ad-muted);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: 12px;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__image-placeholder--dark {
+    background: #121212;
+    color: #f7f2e9;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__sticky-story {
+    display: grid;
+    grid-template-columns: minmax(260px, .9fr) minmax(0, 1.1fr);
+    gap: clamp(24px, 5vw, 80px);
+    width: min(1480px, 100%);
+    margin-inline: auto;
+    padding: clamp(58px, 8vw, 120px) clamp(18px, 4vw, 56px);
+    border-block: 1px solid var(--ad-line);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__sticky-word {
+    position: sticky;
+    top: 24vh;
+    align-self: start;
+    display: grid;
+    gap: 10px;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__sticky-word span {
+    color: var(--ad-muted);
+    font-size: clamp(15px, 1.4vw, 20px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__sticky-word strong {
+    font-size: clamp(58px, 10vw, 150px);
+    line-height: .8;
+    letter-spacing: 0;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__story-steps {
+    display: grid;
+    gap: clamp(18px, 3vw, 34px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__story-step {
+    min-height: 48vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(24px, 4vw, 54px);
+    border: 1px solid var(--ad-line);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__story-step span,
+  .ad-about-{{ section.id }} .ad-about__balance-card span {
+    display: block;
+    margin-bottom: 26px;
+    color: var(--ad-muted);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__story-step p,
+  .ad-about-{{ section.id }} .ad-about__balance-card p {
+    max-width: 560px;
+    color: color-mix(in srgb, var(--ad-ink) 74%, transparent);
+    font-size: clamp(16px, 1.45vw, 22px);
+    line-height: 1.38;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__balance {
+    width: min(1480px, 100%);
+    margin-inline: auto;
+    padding: clamp(58px, 8vw, 120px) clamp(18px, 4vw, 56px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__balance-heading {
+    max-width: 900px;
+    margin-bottom: clamp(26px, 4vw, 56px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__balance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ad-line);
+    border-left: 1px solid var(--ad-line);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__balance-card {
+    min-height: 330px;
+    padding: clamp(22px, 3vw, 42px);
+    border-right: 1px solid var(--ad-line);
+    border-bottom: 1px solid var(--ad-line);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__balance-card h3 {
+    font-size: clamp(24px, 3.8vw, 56px);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__close {
+    min-height: 70svh;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 24px;
+    padding: clamp(58px, 9vw, 140px) 18px;
+    text-align: center;
+    border-top: 1px solid var(--ad-line);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__close p {
+    margin-bottom: 0;
+    color: var(--ad-muted);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__close h2 {
+    max-width: 980px;
+    margin-bottom: 0;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border: 1px solid currentColor;
+    color: var(--ad-ink);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 12px;
+    transition: background-color .24s ease, color .24s ease;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__button:hover {
+    background: var(--ad-ink);
+    color: var(--ad-bg);
+  }
+
+  .ad-about-{{ section.id }} .ad-about__reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+
+  .ad-about-{{ section.id }} .ad-about__reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes ad-about-marquee-{{ section.id }} {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
+  @media screen and (max-width: 989px) {
+    .ad-about-{{ section.id }} .ad-about__hero {
+      min-height: 86svh;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__pronunciation {
+      position: static;
+      margin-top: 28px;
+      width: fit-content;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__intro,
+    .ad-about-{{ section.id }} .ad-about__split,
+    .ad-about-{{ section.id }} .ad-about__sticky-story {
+      grid-template-columns: 1fr;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__split-media {
+      order: -1;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__sticky-word {
+      position: relative;
+      top: auto;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__story-step {
+      min-height: auto;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__balance-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ad-about-{{ section.id }} h1 {
+      font-size: clamp(60px, 24vw, 112px);
+    }
+
+    .ad-about-{{ section.id }} h2 {
+      font-size: clamp(34px, 13vw, 66px);
+    }
+
+    .ad-about-{{ section.id }} .ad-about__hero-text,
+    .ad-about-{{ section.id }} .ad-about__rte {
+      font-size: 17px;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__image-placeholder {
+      min-height: 320px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ad-about-{{ section.id }} .ad-about__marquee-track {
+      animation: none;
+    }
+
+    .ad-about-{{ section.id }} .ad-about__reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.querySelector('[data-ad-about].ad-about-{{ section.id }}');
+    if (!root || !('IntersectionObserver' in window)) {
+      root?.querySelectorAll('.ad-about__reveal').forEach((item) => item.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.18 });
+
+    root.querySelectorAll('.ad-about__reveal').forEach((item) => observer.observe(item));
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "AD - About us",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f4f0e8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Muted text",
+      "default": "#8b8172"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Hero video"
+    },
+    {
+      "type": "text",
+      "id": "hero_kicker",
+      "label": "Kicker",
+      "default": "A brand by two"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Title",
+      "default": "AVENCÉ"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_text",
+      "label": "Hero text",
+      "default": "<p>For the ones building something, while still making room to live.</p>"
+    },
+    {
+      "type": "text",
+      "id": "pronunciation_label",
+      "label": "Pronunciation label",
+      "default": "Pronounced"
+    },
+    {
+      "type": "text",
+      "id": "pronunciation",
+      "label": "Pronunciation",
+      "default": "ah-ven-s"
+    },
+    {
+      "type": "text",
+      "id": "marquee_text",
+      "label": "Marquee text",
+      "default": "Enjoy the progress / Balance / One step forward / "
+    },
+    {
+      "type": "header",
+      "content": "Founders"
+    },
+    {
+      "type": "image_picker",
+      "id": "founders_image",
+      "label": "Founders image"
+    },
+    {
+      "type": "text",
+      "id": "founders_kicker",
+      "label": "Kicker",
+      "default": "Antonio and Iliyan"
+    },
+    {
+      "type": "text",
+      "id": "founders_heading",
+      "label": "Heading",
+      "default": "Two friends. One step forward."
+    },
+    {
+      "type": "richtext",
+      "id": "founders_text",
+      "label": "Text",
+      "default": "<p>We have been best friends since high school, and we always had one thing in common: we loved being around people.</p><p>As life got more serious, that did not disappear. It evolved. Social became real connections, shared ambition, long days, late talks, and time with the people who matter.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Sticky story"
+    },
+    {
+      "type": "text",
+      "id": "sticky_word_top",
+      "label": "Sticky small word",
+      "default": "Enjoying the"
+    },
+    {
+      "type": "text",
+      "id": "sticky_word_bottom",
+      "label": "Sticky big word",
+      "default": "Progress"
+    },
+    {
+      "type": "text",
+      "id": "step_1_heading",
+      "label": "Step 1 heading",
+      "default": "Discipline without disappearing"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_text",
+      "label": "Step 1 text",
+      "default": "Success is not a short dopamine sprint. It is discipline repeated quietly, for years, while life keeps moving around you."
+    },
+    {
+      "type": "text",
+      "id": "step_2_heading",
+      "label": "Step 2 heading",
+      "default": "Work hard. Stay human."
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_text",
+      "label": "Step 2 text",
+      "default": "AVENCÉ is for people who stay locked in on their goals, but still know how to live, connect, and enjoy the journey."
+    },
+    {
+      "type": "text",
+      "id": "step_3_heading",
+      "label": "Step 3 heading",
+      "default": "Balance is the point"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_text",
+      "label": "Step 3 text",
+      "default": "Not running from life. Not living only for weekends or money. Just moving forward with purpose, style, and people."
+    },
+    {
+      "type": "header",
+      "content": "Balance cards"
+    },
+    {
+      "type": "text",
+      "id": "balance_kicker",
+      "label": "Kicker",
+      "default": "Our rhythm"
+    },
+    {
+      "type": "text",
+      "id": "balance_heading",
+      "label": "Heading",
+      "default": "The progress only counts if you are there to enjoy it."
+    },
+    {
+      "type": "header",
+      "content": "Meaning"
+    },
+    {
+      "type": "image_picker",
+      "id": "meaning_image",
+      "label": "Meaning image"
+    },
+    {
+      "type": "text",
+      "id": "meaning_heading",
+      "label": "Heading",
+      "default": "One step forward."
+    },
+    {
+      "type": "richtext",
+      "id": "meaning_text",
+      "label": "Text",
+      "default": "<p>That is what AVENCÉ stands for. Not perfection. Not pretending you have everything figured out.</p><p>Just the decision to move with intention, dress like you mean it, and keep becoming someone you respect.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Closing"
+    },
+    {
+      "type": "text",
+      "id": "closing_kicker",
+      "label": "Kicker",
+      "default": "AVENCÉ"
+    },
+    {
+      "type": "text",
+      "id": "closing_heading",
+      "label": "Heading",
+      "default": "Built for people moving forward without forgetting to live."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop the brand"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "principle",
+      "name": "Principle",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Focus"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Keep your goals close, but do not let them make your life smaller."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AD - About us",
+      "blocks": [
+        {
+          "type": "principle",
+          "settings": {
+            "heading": "Focus",
+            "text": "Show up for the work even when nobody is watching."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "heading": "People",
+            "text": "Build the life, but keep the people who make it worth building."
+          }
+        },
+        {
+          "type": "principle",
+          "settings": {
+            "heading": "Style",
+            "text": "Move with purpose, and let what you wear carry that same energy."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
